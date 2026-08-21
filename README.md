@@ -44,6 +44,17 @@ The invalid login scenarios use `Scenario Outline` with an `Examples` table — 
 | Products page shows items after login | At least one product is visible after login |
 | User can add product to cart | First product added → cart badge shows 1 |
 
+## Non-Obvious Implementation Details
+
+**Why `[BeforeScenario]` and not `[BeforeFeature]` for driver setup**
+Each scenario needs a fresh, isolated browser instance. `[BeforeFeature]` runs once for the entire feature file — one shared driver across all scenarios causes state bleed (cookies, session, URL). `[BeforeScenario]` creates and destroys a driver per scenario, matching NUnit's `[SetUp]`/`[TearDown]` pattern.
+
+**Why `[Binding]` is required on every step definition class**
+SpecFlow scans the assembly at runtime for classes marked with `[Binding]` to discover step definitions. Without it, `[Given]`, `[When]`, and `[Then]` methods are invisible to SpecFlow — the runner reports "No matching step definition" even if the method exists.
+
+**How `Scenario Outline` generates multiple tests**
+Each row in the `Examples` table produces a separate, independently reported test case. Two rows = two tests in the test runner. The `<placeholder>` syntax in the Gherkin step is replaced with the column value for each row — one step definition method handles all variations.
+
 ## Key Concepts Demonstrated
 - Gherkin syntax — `Feature`, `Scenario`, `Scenario Outline`, `Examples`
 - `[Binding]` classes with `[Given]` / `[When]` / `[Then]` step definitions
