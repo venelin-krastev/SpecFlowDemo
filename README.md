@@ -59,11 +59,12 @@ Each row in the `Examples` table produces a separate, independently reported tes
 - Gherkin syntax — `Feature`, `Scenario`, `Scenario Outline`, `Examples`
 - `[Binding]` classes with `[Given]` / `[When]` / `[Then]` step definitions
 - `[BeforeScenario]` / `[AfterScenario]` for driver lifecycle management
-- Shared step — `Given user is logged in` reused across multiple scenarios
+- Shared step — `Given user is logged in` reused across `Products.feature` scenarios; login is a precondition, not the thing under test — one definition change covers all callers
 - Page Object Model (POM) — `LoginPage`, `ProductsPage`
 - `WebDriverWait` with lambda conditions — no `Thread.Sleep`
 - Headless Chrome in CI via `DriverFactory` and `CI` environment variable
 - GitHub Actions CI/CD — automated test run on every push
+- BDD vs plain NUnit Selenium — the mechanics underneath are identical (same `IWebDriver`, same Page Objects, same `WebDriverWait`); the difference is the Gherkin layer on top: scenarios are readable by non-technical stakeholders (PO, BA) and describe behaviour in plain language, while the C# binding classes are where the actual Selenium code lives; BDD's value is shared vocabulary between test and requirement, not a different testing mechanism
 
 ## GitHub Actions CI
 
